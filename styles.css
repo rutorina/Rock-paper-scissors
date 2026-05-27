@@ -1,0 +1,70 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.visible {
+    display: block;
+}
+
+.invisible {
+    position: absolute;
+    left: -9999px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    align-items: stretch;
+}
+
+#game-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+button {
+    padding: 1rem 2rem;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    
+}
+
+.row button {
+    flex: 1;
+}
+
+body {
+    height: 100vh;
+    background-color: #f0f0f0;
+    padding: 10vh;
+    display: flex;
+    flex-direction: column;
+    gap: 5vh;
+    justify-content: center;
+    align-items: center;
+}
+
+#score, #result {
+    display: block;
+
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}

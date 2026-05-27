@@ -11,26 +11,10 @@ let playerScore = 0;
 let computerScore = 0;
 
 const choices = ["rock", "paper", "scissors"];
-let usersChoice = "";
-let computerChoice = "";
 
 function getComputerChoice() {
     const randomIndex = Math.floor(Math.random() * choices.length);
     return choices[randomIndex];
-}
-
-function getUserChoice() {
-    let choice = prompt("Enter your choice (rock, paper, scissors) using a word or number of 1, 2, 3 or 0 to stop playing:");
-    while (!choices.includes(choice) && !["1", "2", "3", "0"].includes(choice)) {
-        choice = prompt("Invalid choice. Please enter rock, paper, scissors or 1, 2, 3 or 0 to stop playing:");
-    }
-    if (choice === "0") {
-        return null; // Return null to indicate the user wants to stop playing
-    }
-    if (["1", "2", "3"].includes(choice)) {
-        return choices[parseInt(choice) - 1]; // Convert number to corresponding choice
-    }
-    return choice; // Return the valid choice
 }
 
 function playRound(playerSelection, computerSelection) {
@@ -38,8 +22,8 @@ function playRound(playerSelection, computerSelection) {
         case (playerSelection === computerSelection):
             return "It's a tie!";
         case (playerSelection === "rock" && computerSelection === "scissors") ||
-             (playerSelection === "paper" && computerSelection === "rock") ||
-             (playerSelection === "scissors" && computerSelection === "paper"):
+            (playerSelection === "paper" && computerSelection === "rock") ||
+            (playerSelection === "scissors" && computerSelection === "paper"):
             playerScore++;
             return `You win! ${playerSelection} beats ${computerSelection}`;
         default:
@@ -49,23 +33,44 @@ function playRound(playerSelection, computerSelection) {
 }
 
 function displayFinalScore() {
-    alert(`Final Score - Player: ${playerScore}, Computer: ${computerScore}`);
     if (playerScore > computerScore) {
-        alert("Congratulations! You are the winner!");
+        resultContainer.innerText = "Congratulations! You are the winner!";
     } else if (computerScore > playerScore) {
-        alert("Sorry! The computer wins!");
+        resultContainer.innerText = "Sorry! The computer wins!";
     } else {
-        alert("It's a tie!");
+        resultContainer.innerText = "It's a tie!";
     }
 }
 
-while (true) {
-    usersChoice = getUserChoice();
-    if (usersChoice === null) {
-        break; // Exit the loop if the user wants to stop playing
-    }
-    computerChoice = getComputerChoice();
-    alert(`Computer chose: ${computerChoice}\nYour choice: ${usersChoice}\n${playRound(usersChoice, computerChoice)}`);
-}
 
-displayFinalScore();
+const startButton = document.getElementById("start-button");
+const optionsContainer = document.getElementById("options");
+const resultContainer = document.getElementById("result");
+const scoreContainer = document.getElementById("score");
+
+startButton.addEventListener("click", () => {
+    optionsContainer.classList.toggle("invisible");
+    optionsContainer.classList.toggle("disabled");
+    startButton.classList.toggle("visible");
+    startButton.classList.toggle("invisible");
+    scoreContainer.textContent = `Score - Player: 0, Computer: 0`;
+    resultContainer.textContent = "";
+});
+
+optionsContainer.addEventListener("click", (event) => {
+    if (event.target.tagName === "BUTTON") {
+        const playerSelection = event.target.dataset.choice;
+        const computerSelection = getComputerChoice();
+        const result = playRound(playerSelection, computerSelection);
+        resultContainer.textContent = `Computer chose: ${computerSelection}\nYour choice: ${playerSelection}\n${result}`;
+        scoreContainer.textContent = `Score - Player: ${playerScore}, Computer: ${computerScore}`;
+        if (playerScore === 5 || computerScore === 5) {
+            scoreContainer.textContent = `Score - Player: ${playerScore}, Computer: ${computerScore}`;
+            displayFinalScore();
+            playerScore = 0;
+            computerScore = 0;
+            optionsContainer.classList.toggle("disabled");
+            setTimeout(() => startButton.click(), 3000);
+        }
+    }
+});
